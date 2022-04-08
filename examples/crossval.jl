@@ -34,7 +34,6 @@ scores = cross_validate(
 	(c, inds) -> compute_rmse(c, data[:, inds]),    # evaluation function
 	n,    			# total number of samples
 	Kfold(n, 5)) 	# cross validation plan: 5-fold 
-	#Reverse)		# it was on the old version they removed ordering later
 
 # display results
 
