@@ -6,18 +6,18 @@
 #
 
 using MLBase
-
+using Printf
 # functions
 
 function compute_center(X::Matrix{Float64})
-	c = vec(mean(X, 2))
+	c = vec(mean(X, dims = 2))
 	@printf("training on %d samples => (%.4f, %.4f)\n", 
 		size(X,2), c[1], c[2])
 	return c
 end
 
 function compute_rmse(c::Vector{Float64}, X::Matrix{Float64}) 
-	v = sqrt(mean(sum(abs2(X .- c),1)))
+	v = sqrt(mean(sum(abs2.(X .- c))))
 	@printf("RMSE on test set: %.6f\n\n", v)
 	return v
 end
@@ -29,14 +29,14 @@ const data = [2., 3.] .+ randn(2, n)
 
 # cross validation
 
-(c, v, inds) = cross_validate(
+scores = cross_validate(
 	inds -> compute_center(data[:, inds]),     		# training function
 	(c, inds) -> compute_rmse(c, data[:, inds]),    # evaluation function
 	n,    			# total number of samples
-	Kfold(n, 5), 	# cross validation plan: 5-fold 
-	Reverse)		# smaller score indicates better model
+	Kfold(n, 5)) 	# cross validation plan: 5-fold 
+	#Reverse)		# it was on the old version they removed ordering later
 
 # display results
 
-@printf("best model = (%.4f, %.4f), score = %.6f\n", c[1], c[2], v)
+print("scores :\n", scores)
 
