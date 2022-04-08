@@ -6,19 +6,18 @@
 #
 
 using MLBase
-using Printf
+
 # functions
 
 function compute_center(X::Matrix{Float64})
 	c = vec(mean(X, dims = 2))
-	@printf("training on %d samples => (%.4f, %.4f)\n", 
-		size(X,2), c[1], c[2])
+	println("training on $(size(X,2)) samples => ($(c[1]), $(c[2]))")
 	return c
 end
 
 function compute_rmse(c::Vector{Float64}, X::Matrix{Float64}) 
 	v = sqrt(mean(sum(abs2.(X .- c))))
-	@printf("RMSE on test set: %.6f\n\n", v)
+	println("RMSE on test set: $v\n")
 	return v
 end
 
